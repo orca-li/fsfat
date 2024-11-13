@@ -1,102 +1,14 @@
 #if !defined STM_FS_STFAT32_H
 #define STM_FS_STFAT32_H
 
-#define IS_FS_FAT32 1
-#define IS_FS_FATX IS_FS_FAT32
+#include "FatDefs.h"
 
-typedef struct XFAT_FIELD
-{
-    unsigned char * const field;
-    const unsigned char size;
-    const unsigned char offset;
-} field_ft;
+#define FAT_TESTS_API
+#if defined FAT_TESTS_API
 
-#if defined IS_FS_FATX == IS_FS_FAT12 || IS_FS_FATX == IS_FS_FAT16 || IS_FS_FATX == IS_FS_FAT32
+void 
+GetFatSignatureTable(void);
 
-typedef struct XFAT_BOOT_SECTOR 
-{
-    field_ft jmpBoot;
-    field_ft OEMName;
-} boot_start_ft;
-
-typedef struct XFAT_BIOS_PARAMETERS_BOOT
-{
-    field_ft BytsPerSec;
-    field_ft SerPerClus;
-    field_ft RsvdSecCnt;
-    field_ft NumFATs;
-    field_ft RootEntCnt;
-    field_ft TotSec16;
-    field_ft Media;
-    field_ft FATSz16;
-    field_ft SecPerTrk;
-    field_ft NumHeads;
-    field_ft HiddSec;
-    field_ft TotSec32;
-
-#if IS_FS_FATX == IS_FS_FAT32
-    field_ft FATSz32;
-    field_ft ExtFlags;
-    field_ft FSVer;
-    field_ft RootClus;
-    field_ft FSInfo;
-    field_ft BkBootSec;
-    field_ft Reserved;
-#endif
-
-    field_ft DrvNum;
-    field_ft Reserved1;
-    field_ft BootSig;
-    field_ft VollD;
-    field_ft VolLab;
-    field_ft FilSysType;
-    field_ft SetToZero1;
-    field_ft Signature_word;
-    field_ft SetToZero2;
-
-} biospb_ft;
-
-#else
-#error "Unknown FAT SYSTEM"
-#endif
-
-typedef struct XFAT_FILE_SYSTEM_INFO
-{
-    field_ft LeadSeg;
-    field_ft Reserved1;
-    field_ft StrucSig;
-    field_ft FreeCount;
-    field_ft Nxt_Free;
-    field_ft Reserved2;
-    field_ft TrailSig;
-} fsinfo_ft;
-
-typedef struct XFAT_DIRECTORY_STRUCTURE
-{
-    field_ft Name;
-    field_ft Attr;
-    field_ft NTRes;
-    field_ft CrtTimeTenth;
-    field_ft CrtTime;
-    field_ft CrtDate;
-    field_ft LstAccDate;
-    field_ft FstClusHI;
-    field_ft WrtTime;
-    field_ft WrtDate;
-    field_ft FstClusLO;
-    field_ft FileSize;
-} dir_ft;
-
-typedef struct XFAT_LONG_FILE_NAME_IMPLEMENTATION
-{
-    field_ft Ord;
-    field_ft Name1;
-    field_ft Attr;
-    field_ft Type;
-    field_ft Chksum;
-    field_ft Name2;
-    field_ft FstClusLO;
-    field_ft Name3;
-} ldir_ft;
+#endif 
 
 #endif /* STM_FS_STFAT32_H */
