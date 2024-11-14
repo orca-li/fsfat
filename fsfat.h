@@ -6,8 +6,12 @@
 #define FAT_TESTS_API
 #if defined FAT_TESTS_API
 
+void
+BrutforceFatBuffer(void);
 void 
 GetFatSignatureTable(void);
+void
+PrintFatBuffer(void);
 
 #endif 
 

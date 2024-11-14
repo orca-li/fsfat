@@ -4,16 +4,19 @@
 /**
  * @brief API tag
  */
-#define FSFAT_API
-#define FSFAT_TEST
+#define FATAPI
+#define TEST
 
 #define IN
 #define OUT
-#define FSFAT_INTERNAL
+#define INTERNAL
 
+#define SKIP_INDEX_OFFSET(_index) (_index + 1)
+#define ARR_SIZEOF(_arr) (sizeof(_arr) / sizeof(*_arr))
 #define UNI_SIZEOF(_uni, _type) (sizeof(_uni) / sizeof(_type))
 
 #define VOID void
+// #define NULL (FILE*)0
 #define UINT8 unsigned char
 #define UINT16 unsigned short
 #define UINT32 unsigned int
@@ -34,13 +37,17 @@
 
 #define VOLUME_SIGNATURE_SZ 512
 
+#define MAIL_NULL               0x00
+#define MAIL_FIELD              0x01
+#define MAIL_BROKEN_FIELD       0x02
+
 #define RETURN(_what, ...) RETURN_ ## _what (__VA_ARGS__)
 #define RETURN_STATUS(_status) RETURN_STATUS_ ## _status
 #define RETURN_STATUS_OK                0x00
 #define RETURN_STATUS_UNK_FAT_BASE      0x01
 #define RETURN_STATUS_NOT_IMPLEMENTED   0x02
 #define RETURN_FILE(_file) RETURN_FILE_ ## _file
-#define RETURN_FILE_NULL
+#define RETURN_FILE_VPZ ((void*)0)
 
 #define INTERNAL_FAT_SIGNATURE_NAME FatBuffer
 
@@ -49,6 +56,7 @@
         .field = &INTERNAL_FAT_SIGNATURE_NAME[_index], \
         .size = _size, \
         .offset = _offset, \
+        .mail = MAIL_FIELD, \
     }
 
 #define STRUCT_ID_FIELD(_field) \
@@ -58,6 +66,14 @@
         STRUCT_ID_ ## _field ## _SZ, \
         STRUCT_ID_ ## _field ## _OFFSET \
     )
+
+#define STRUCT_ID_FIELD_NULL \
+    ._NULL_ = { \
+        .field = RETURN_FILE_VPZ, \
+        .size = 0, \
+        .offset = 0, \
+        .mail = MAIL_NULL \
+    }
 
 #define STRUCT_ID_FATX_BEGIN        (0)
 #define STRUCT_ID_FATX_SZ           (0)
