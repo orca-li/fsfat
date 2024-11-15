@@ -15,6 +15,21 @@ STATIC FAT_BPB
 BiosParametersBoot = {
     STRUCT_ID_FIELD(BYTSPERSEC),
     STRUCT_ID_FIELD(SERPERCLUS),
+    STRUCT_ID_FIELD(RSVDSECCNT),
+    STRUCT_ID_FIELD(NUMFATS),
+    STRUCT_ID_FIELD(ROOTENTCNT),
+    STRUCT_ID_FIELD(TOTSEC16),
+    STRUCT_ID_FIELD(MEDIA),
+    STRUCT_ID_FIELD(FATSZ16),
+    STRUCT_ID_FIELD(SECPERTRK),
+    STRUCT_ID_FIELD(NUMHEADS),
+    STRUCT_ID_FIELD(HIDDSEC),
+    STRUCT_ID_FIELD(TOTSEC32),
+
+#if IS_FS_FATX == IS_FS_FAT32
+    STRUCT_ID_FIELD(FATSZ32),
+#endif
+
     STRUCT_ID_FIELD_NULL
 };
 
@@ -65,18 +80,29 @@ FATAPI FatInit(
 #include <stdio.h>
 
 #define DEBUG_LOG(...) printf(__VA_ARGS__)
-#define DEBUG_FIELD_INTERNAL(_field) \
-    DEBUG_LOG("%016s : %03s : %03s : %03s\n", \
-        "Address", \
+#define GET_FIELD_NAME_STR(_field) \
+    #_field
+#define FIELD_PARSE_TOKEN(_field, _param) \
+    STRUCT_ID_ ## _field ## _param
+#define DEBUG_FIELD_INTERNAL_TITLE() \
+    DEBUG_LOG("%16s   %05s   %03s   %03s   %03s   %016s   %05s\n", \
+        "Name", \
+        "Index", \
+        "<<<", \
         "Sz", \
-        "<<", \
-        "M" \
-    ); \
-    DEBUG_LOG("%016p : %03d : %03d : %03d\n", \
-        &BiosParametersBoot._field.field, \
-        BiosParametersBoot._field.size, \
-        BiosParametersBoot._field.offset, \
-        BiosParametersBoot._field.mail \
+        "M", \
+        "Address", \
+        "Value" \
+    )
+#define DEBUG_FIELD_INTERNAL(_sect, _field) \
+    DEBUG_LOG("%16s : %05d : %03d : %03d : %03d : %016p : %02hhx\n", \
+        GET_FIELD_NAME_STR(_field), \
+        FIELD_PARSE_TOKEN(_field, _IDX), \
+        _sect.FIELD_PARSE_TOKEN(_field, _NAME).offset, \
+        _sect.FIELD_PARSE_TOKEN(_field, _NAME).size, \
+        _sect.FIELD_PARSE_TOKEN(_field, _NAME).mail, \
+        _sect.FIELD_PARSE_TOKEN(_field, _NAME).field, \
+        *_sect.FIELD_PARSE_TOKEN(_field, _NAME).field \
     )
 
 UINT16
@@ -133,6 +159,26 @@ TEST INTERNAL PrintSection(
     }
 }
 
+VOID
+TEST GetManualTable(VOID)
+{
+    DEBUG_FIELD_INTERNAL_TITLE();
+    DEBUG_FIELD_INTERNAL(BootStart, JMPBOOT);
+    DEBUG_FIELD_INTERNAL(BootStart, OEMNAME);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, BYTSPERSEC);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, SERPERCLUS);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, RSVDSECCNT);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, NUMFATS);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, ROOTENTCNT);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, TOTSEC16);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, MEDIA);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, FATSZ16);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, SECPERTRK);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, NUMHEADS);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, HIDDSEC);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, TOTSEC32);
+}
+
 VOID 
 TEST GetFatSignatureTable(VOID)
 {
@@ -141,12 +187,9 @@ TEST GetFatSignatureTable(VOID)
 
     align = 0;
     
-    // pfield = (FAT_FIELD*)&BootStart;
-    // lim = GetSectionLength(pfield);
-    // PrintSection(&pfield, &align, lim);
-    DEBUG_FIELD_INTERNAL(STRUCT_ID_SERPERCLUS_NAME);
-    DEBUG_FIELD_INTERNAL(STRUCT_ID_BYTSPERSEC_NAME);
-
+    pfield = (FAT_FIELD*)&BootStart;
+    lim = GetSectionLength(pfield);
+    PrintSection(&pfield, &align, lim);
 
     pfield = (FAT_FIELD*)&BiosParametersBoot;
     lim = GetSectionLength(pfield);
@@ -164,7 +207,8 @@ TEST PrintFatBuffer(VOID)
     {
         DEBUG_LOG("%02hhx", FatBuffer[i]);
 
-        putchar((SKIP_INDEX_OFFSET(i) % 32 == 0) ? '\n' : ' ');
+        putchar((SKIP_INDEX_OFFSET(i) % 32 == 0) ? 
+            '\n' : ' ');
     }
 
     putchar('\n');

@@ -5,6 +5,7 @@ int
 main(int argc, char *argv[])
 {
     BrutforceFatBuffer();
+    GetManualTable();
     GetFatSignatureTable();
 
     printf("\nFatBuffer[]:\n");

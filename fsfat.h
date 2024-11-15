@@ -12,6 +12,8 @@ void
 GetFatSignatureTable(void);
 void
 PrintFatBuffer(void);
+void
+GetManualTable(void);
 
 #endif 
 

@@ -1,8 +1,9 @@
 #if !defined FAT_DEFINES_H
 #define FAT_DEFINES_H
 
+#include "FatConfig.h"
+
 #define IS_FS_FAT32 1
-#define IS_FS_FATX IS_FS_FAT32
 /* API */
 typedef struct XFAT_FIELD
 {
