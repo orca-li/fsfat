@@ -8,8 +8,8 @@
 typedef struct XFAT_FIELD
 {
     unsigned char * const field;
-    const unsigned char size;
-    const unsigned char offset;
+    const unsigned short size;
+    const unsigned short offset;
     unsigned char mail;
 } field_ft;
 
@@ -51,7 +51,7 @@ typedef struct XFAT_BIOS_PARAMETERS_BOOT
     field_ft DrvNum;
     field_ft Reserved1;
     field_ft BootSig;
-    field_ft VollD;
+    field_ft VolID;
     field_ft VolLab;
     field_ft FilSysType;
     field_ft SetToZero1;

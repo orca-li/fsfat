@@ -28,7 +28,23 @@ BiosParametersBoot = {
 
 #if IS_FS_FATX == IS_FS_FAT32
     STRUCT_ID_FIELD(FATSZ32),
+    STRUCT_ID_FIELD(EXTFLAGS),
+    STRUCT_ID_FIELD(FSVER),
+    STRUCT_ID_FIELD(ROOTCLUS),
+    STRUCT_ID_FIELD(FSINFO),
+    STRUCT_ID_FIELD(BKBOOTSEC),
+    STRUCT_ID_FIELD(RESERVED0),
 #endif
+
+    STRUCT_ID_FIELD(DRVNUM),
+    STRUCT_ID_FIELD(RESERVED1),
+    STRUCT_ID_FIELD(BOOTSIG),
+    STRUCT_ID_FIELD(VOLID),
+    STRUCT_ID_FIELD(VOLLAB),
+    STRUCT_ID_FIELD(FILSYSTYPE),
+    STRUCT_ID_FIELD(SETTOZERO1),
+    STRUCT_ID_FIELD(SIGNATUREWORD),
+    STRUCT_ID_FIELD(SETTOZERO2),
 
     STRUCT_ID_FIELD_NULL
 };
@@ -78,6 +94,20 @@ FATAPI FatInit(
 #if defined FAT_TESTS_API
 
 #include <stdio.h>
+
+struct CORRECT_SECTION_VALUES {
+    unsigned short index;
+    unsigned short size;
+    unsigned short offset;
+};
+
+struct CORRECT_SECTION_VALUES CorSecVals[] = {
+    {
+        .index = 0,
+        .size = 3,
+        .offset = 3,
+    },
+};
 
 #define DEBUG_LOG(...) printf(__VA_ARGS__)
 #define GET_FIELD_NAME_STR(_field) \
@@ -177,6 +207,28 @@ TEST GetManualTable(VOID)
     DEBUG_FIELD_INTERNAL(BiosParametersBoot, NUMHEADS);
     DEBUG_FIELD_INTERNAL(BiosParametersBoot, HIDDSEC);
     DEBUG_FIELD_INTERNAL(BiosParametersBoot, TOTSEC32);
+
+#if IS_FS_FATX == IS_FS_FAT32
+    putchar('\n');
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, FATSZ32);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, EXTFLAGS);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, FSVER);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, ROOTCLUS);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, FSINFO);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, BKBOOTSEC);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, RESERVED0);
+    putchar('\n');
+#endif
+
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, DRVNUM);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, RESERVED1);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, BOOTSIG);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, VOLID);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, VOLLAB);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, FILSYSTYPE);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, SETTOZERO1);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, SIGNATUREWORD);
+    DEBUG_FIELD_INTERNAL(BiosParametersBoot, SETTOZERO2);
 }
 
 VOID 
