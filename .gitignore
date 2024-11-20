@@ -1,2 +1,16 @@
 *.out
+*.m4
+config*
+!/configure.ac
+depcomp
+install-sh
+missing
+*.in
+compile
 .vscode/
+.deps/
+autom4te*
+.dirstamp
+Makefile
+*.o
+fsfat

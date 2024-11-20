@@ -158,13 +158,45 @@ TEST INTERNAL GetSectionLength(
 }
 
 VOID
-TEST BrutforceFatBuffer(VOID)
+TEST INTERNAL BrutforceFatBuffer(VOID)
 {
     UINT16 i;
 
     for(i = 0; i < ARR_SIZEOF(FatBuffer); i++)
     {
         FatBuffer[i] = i;
+    }
+}
+
+VOID
+TEST INTERNAL EnumFatBuffer(VOID)
+{
+    UINT16 i;
+    FAT_FIELD *pfield;
+
+
+    for(i = 0;  ; i++)
+    {
+        
+    }
+}
+
+VOID
+TEST InitFatBuffer(UINT8 type)
+{
+    switch (type)
+    {
+    case _FAT_BUFFER_INIT_TYPE_Brutforce:
+        BrutforceFatBuffer();
+        return;
+
+    case _FAT_BUFFER_INIT_TYPE_Enum:
+        EnumFatBuffer();
+        return;
+    
+    default:
+        printf("Unknown init type\n");
+        return;
     }
 }
 

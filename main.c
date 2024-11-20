@@ -4,12 +4,12 @@
 int
 main(int argc, char *argv[])
 {
-    BrutforceFatBuffer();
-    GetManualTable();
-    GetFatSignatureTable();
-
-    printf("\nFatBuffer[]:\n");
-    PrintFatBuffer();
+    if(fatFAIL == fatLibInit())
+    {
+        fprintf(stderr, "fatLibInit(): failed\n");
+        printf("status %d\n", fatGetCallStatus());
+        return 1;
+    }
 
     return 0;
 }

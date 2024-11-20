@@ -1,20 +1,6 @@
-#if !defined STM_FS_STFAT32_H
-#define STM_FS_STFAT32_H
+#if !defined FS_FAT_LIB_H
+#define FS_FAT_LIB_H
 
-#include "FatDefs.h"
+#include "FatIfc/Inc/FatApi.h"
 
-#define FAT_TESTS_API
-#if defined FAT_TESTS_API
-
-void
-BrutforceFatBuffer(void);
-void 
-GetFatSignatureTable(void);
-void
-PrintFatBuffer(void);
-void
-GetManualTable(void);
-
-#endif 
-
-#endif /* STM_FS_STFAT32_H */
+#endif /* FS_FAT_LIB_H */
