@@ -1,6 +1,8 @@
 #if !defined FAT_LOCATION_COUNTER_H
 #define FAT_LOCATION_COUNTER_H
 
+#include "FatDef.h"
+
 /**
  * 
  * @brief SignatureBuffer
@@ -30,7 +32,7 @@ typedef struct _FAT_SIGNATURE_FIELD
 {
     unsigned char * const field;
     const unsigned short size;
-    const unsigned short offset;
+    const unsigned short index;
     unsigned char * const name;
 
     /**

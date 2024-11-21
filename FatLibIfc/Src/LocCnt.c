@@ -1,11 +1,16 @@
 #include "LocCnt.h"
 
-static FAT_HB_BOOT_START BootStart = {
+static fatUINT8 HexSignatureArray[512] = {0};
 
+static FAT_HB_BOOT_START BootStart = {
+    fatFIELD_ITEM_ID_INIT(jmpBoot),
+    fatFIELD_ITEM_ID_INIT(OEMName),
+    // fatFIELD_ITEM_ID_INIT(_NULL),
 };
 
 static FAT_HB_BIOSPB BiosParametersBoot = {
-
+    fatFIELD_ITEM_ID_INIT(BytsPerSec),
+    fatFIELD_ITEM_ID_INIT(SerPerClus),
 };
 
 static FAT_HB_FSINFO FileSystemInfo = {
